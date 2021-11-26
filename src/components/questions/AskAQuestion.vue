@@ -1,69 +1,56 @@
 ﻿<template>
     <div>
-
-        <br>
+        <br />
         <h2>Faça uma pergunta</h2>
-        <br>
-        <p>{{teste}}</p>
+        <span>{{ response }}</span>
 
-        <input v-model="title" type="text" placeholder="Título" autofocus required/>
-        <br><input v-model="text" type="textarea" placeholder="Texto" required/>
-        <br><button v-on:click="askAQuestion()" class="btn waves-effect waves-light" type="submit">Enviar</button>
-
+        <br />
+        <input v-model="title" type="text" placeholder="Título" autofocus required />
+        <br />
+        <input v-model="body" type="textarea" placeholder="Corpo" required />
+        <br />
+        <button
+            v-on:click="askAQuestion()"
+            class="btn waves-effect waves-light"
+            type="submit"
+        >Enviar</button>
     </div>
 </template>
 
 
 
 <script>
-    import api from '../../services/api.js'
-    import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
+import { apiAskAQuestion } from "../../services/question"
 
-    export default {
-        name: 'AskAQuestion',
+export default {
+    name: 'AskAQuestion',
 
-        data: function () {
-            return {
-                title: null,
-                text: null,
-                category: 3,
-                teste: null,
-            }
-        },
-
-        computed: {
-            ...mapGetters([
-                'user',
-                'token'
-            ])
-        },
-
-        methods: {
-            askAQuestion: function () {
-                const access = "Bearer " + this.token.access;
-
-                //add access token and json format in header
-                const headers = {
-                    "content-type": "application/json",
-                    "Authorization": access
-                };
-
-                //add the data
-                const data = {
-                    question_title: this.title,
-                    question_text: this.text,
-                    category: this.category,
-                    published_by: this.user.userId,
-                    pub_date: new Date()
-                };
-
-                api
-                    .post("apiquestions/ask/", data, { headers });
-
-                this.$router.push({ path: '/questions/' });
-            }
-
-
+    data: function () {
+        return {
+            title: null,
+            body: null,
+            response: null,
         }
+    },
+
+    computed: {
+        ...mapGetters([
+            'user',
+        ])
+    },
+
+    methods: {
+        askAQuestion: function () {
+
+            apiAskAQuestion(this.title, this.body, this.user.id).then(response => {
+                this.response = response.data
+            })
+
+            this.$router.push({ path: '/questions/' });
+        }
+
+
     }
+}
 </script>

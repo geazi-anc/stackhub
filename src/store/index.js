@@ -8,35 +8,25 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
     state: {
         user: {
-            username: null,
-            userId: -1
-        },
-
-        token: {
-            access: null,
-            refresh: null
+            id: null,
+            first_name: null,
+            last_name: null
         }
     },
 
     mutations: {
         addUser(state, payload) {
-            state.user.username = payload.username;
-            state.user.userId = payload.userId;
-        },
-
-        addToken(state, payload) {
-            state.token.access = payload.access;
-            state.token.refresh = payload.refresh;
+            state.user.id = payload.id;
+            state.user.first_name = payload.first_name;
+            state.user.last_name = payload.last_name
         }
     },
 
     getters: {
         user: state => {
             return state.user;
-        },
-        token: state => {
-            return state.token;
         }
+
     }
 })
 

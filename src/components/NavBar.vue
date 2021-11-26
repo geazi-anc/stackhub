@@ -2,13 +2,19 @@
     <div>
         <nav>
             <div class="nav-wrapper">
-
                 <ul id="nav-mobile" class="left hide-on-med-and-down">
-
-                    <li v-if="token.access === null"><router-link to="/account/login">Fazer login</router-link></li>
-                    <li v-else><router-link to="/account/login">{{user.username}}</router-link></li>
-                    <li><router-link to="/questions">Perguntas</router-link></li>
-
+                    <li>
+                        <router-link to="/account/signup">Registrar-se</router-link>
+                    </li>
+                    <li v-if="user.id == null">
+                        <router-link to="/account/login">Fazer login</router-link>
+                    </li>
+                    <li v-else>
+                        <router-link to="/account/login">{{ user.first_name }} {{user.last_name}}</router-link>
+                    </li>
+                    <li>
+                        <router-link to="/questions">Perguntas</router-link>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -18,22 +24,15 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
-        name: 'nav-bar',
-        computed: {
-            ...mapGetters([
-                'token',
-                'user'
-            ])
-        }
+    name: 'nav-bar',
+    computed: {
+        ...mapGetters([
+            'user'
+        ])
+    }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-</style>

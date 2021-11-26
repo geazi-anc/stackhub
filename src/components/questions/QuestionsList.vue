@@ -1,64 +1,53 @@
 ﻿<template>
-    <div id="questions-list">
+  <div id="questions-list">
+    <br />
+    <h2>Perguntas recentes</h2>
+    <router-link to="/questions/ask" class="waves-effect waves-light btn">Faça uma pergunta</router-link>
 
-        <br>
-        <h2>Perguntas recentes</h2>
-        <router-link to="/questions/ask" class="waves-effect waves-light btn">Faça uma pergunta</router-link>
-
-        <div v-for="question in info" :key="question.id">
-            <SingleQuestion v-bind:question="question"></SingleQuestion>
-        </div>
-
-
-        <router-view></router-view>
+    <br />
+    <div v-for="question in questions" :key="question.id">
+      <single-question v-bind:question="question" v-bind:published_by="question.published_by"></single-question>
     </div>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-    import SingleQuestion from './Question.vue'
-    import api from '../../services/api.js'
+import { mapGetters } from 'vuex'
+import SingleQuestion from "./Question.vue"
+import { apiGetQuestions } from "../../services/question"
 
 
 export default {
-        name: 'questions-list',
-        data: function () {
-            return {
-                info: null,
-            }
-        },
+  name: 'questions-list',
+  data: function () {
+    return {
+      questions: null,
+    }
+  },
 
-        mounted() {
-                    api
-                .get('apiquestions/')
-            .then(response => (this.info = response.data))
-        },
+  mounted() {
+    apiGetQuestions().then(response => {
+      this.questions = response.data
+    })
+  },
 
-        components: {
-            SingleQuestion
-        },
+  components: {
+    SingleQuestion
+  },
 
-        computed: {
-            user() {
-                return this.$store.state.user
-            }
-        }
+  computed: {
+    ...mapGetters([
+      'user',
+    ])
+  },
+
+  methods: {
+    getQuestions: function () {
+
+    }
+
+  }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
